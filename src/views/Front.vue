@@ -60,6 +60,6 @@ export default {
 </script>
 <style scoped>
   *{
-    border: 1px solid blueviolet;
+    border: 1px solid rgb(231, 231, 231);
   }
 </style>
