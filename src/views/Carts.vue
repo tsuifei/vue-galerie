@@ -1,5 +1,5 @@
 <template>
-  <div class="carts">
+  <div class="carts" v-if="final_total=>1">
     <!-- 購物車列表 -->
     <div class="text-end">
         <button @click="deleteAllCarts" type="button" class="btn btn-outline-danger">
@@ -133,6 +133,7 @@ export default {
   data () {
     return {
       cartsData: {},
+      final_total: 0,
       isLoading: true,
       form: {
         user: {
@@ -220,6 +221,10 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.cartsData = res.data.data
+            this.final_total = res.data.data.final_total
+            if (this.final_total === 0) {
+              this.$router.push('/products')
+            }
           } else {
             alert(res.data.message)
           }
@@ -275,7 +280,6 @@ export default {
   created () {
     this.getAllCart()
   }
-
 }
 
 </script>

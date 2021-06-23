@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     showModal () {
+      this.qty = 1
       this.modal.show()
     },
     hideModal () {

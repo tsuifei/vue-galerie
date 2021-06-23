@@ -4,11 +4,9 @@
     <div class="text-end mt-4">
       <!-- 新增 Button trigger modal -->
       <button
-        @click="openModal('new')"
+        @click="openModal(true)"
         type="button"
         class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#adminProductModal"
       >
         建立新產品
       </button>
@@ -36,13 +34,13 @@
           </td>
           <td>
             <div class="btn-group" width="120">
-              <!-- <button
-                @click="openModal('edit', item)"
+              <button
+                @click="openModal(false, item)"
                 type="button"
                 class="btn btn-sm btn-outline-primary btn-sm"
               >
                 編輯
-              </button> -->
+              </button>
               <button
                 @click="deleteProduct(item) "
                 type="button"
@@ -57,17 +55,20 @@
     </table>
   <!-- pagination bloc  -->
     <div class="col-6">
-      <pagination :page="pagination" @get-products="getProducts"></pagination>
+      <Pagination :page="pagination" @get-products="getProducts"></Pagination>
     </div>
     <!-- Admin Product Modal  -->
-    <!-- <admin-product-modal ref="adminProductModal" :propsProduct = "tempProduct"
-        @emit-update="getProduct" :is-new= "isNew"></admin-product-modal>-->
+    <Admin-product-modal
+      @update-product="updateProduct"
+      ref="adminProductModal"
+      :propsProduct = "tempProduct"
+      :is-new= "isNew"/>
   </div>
 </template>
 
 <script>
-import pagination from '@/components/Pagination.vue'
-// import adminProductModal from '@/components/AdminProductModal.vue'
+import Pagination from '@/components/Pagination.vue'
+import AdminProductModal from '@/components/AdminProductModal.vue'
 export default {
   name: 'Products',
   data () {
@@ -76,26 +77,30 @@ export default {
       tempProduct: {
         imagesUrl: []
       },
+      modal: {
+
+      },
       isNew: false,
       // isLoading: true,
-      pagination: {}
+      pagination: {},
+      page: 1
     }
   },
   components: {
-    // adminProductModal,
-    pagination
+    AdminProductModal,
+    Pagination
   },
   methods: {
     // 取得產品列表
     getProducts (page = 1) {
-      console.log('進來getProducts')
+      // console.log('進來getProducts')
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`
       this.$http.get(url)
         .then((response) => {
-          console.log('取得產品列表')
+          // console.log('取得產品列表')
           if (response.data.success) {
             this.products = response.data.products
-            console.log(this.products)
+            // console.log(this.products)
             this.pagination = response.data.pagination
           } else {
             alert(response.data.message)
@@ -106,40 +111,54 @@ export default {
           console.log(error)
         })
     },
-    // Get 單一商品(Modal)
-    getModalProduct (id) {
-      console.log('ok?')
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`
-      this.$http
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            this.product = res.data.product
-            this.$refs.adminProductModal.showModal()
+    // 新增/更新產品
+    updateProduct (item) {
+      this.tempProduct = item
+      // 新增
+      let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`
+      let httpMethod = 'post'
+      if (!this.isNew) {
+        url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`
+        httpMethod = 'put'
+        // this.$emit('emitUpdate')
+      }
+      // 使用[]物件取值
+      this.http[httpMethod](url, {
+        data: this.tempProduct
+      })
+        .then((response) => {
+          if (response.data.success) {
+            alert(response.data.message)
+            this.$refs.AdminProductModal.hideModal()
+            this.getProducts(this.page)
+            // this.$emit('emitUpdate')
           } else {
-            alert(res.data.message)
+            alert(response.data.message)
           }
-        }).catch((err) => {
-          console.log(err)
+        })
+        .catch((error) => {
+          console.log(error)
         })
     },
     // Modal 狀態切換
     openModal (isNew, item) { // 參數帶(狀態,產品)
+      console.log('openModal OK')
       // 狀態: new
-      if (isNew === 'new') {
+      if (isNew) {
         // 新增清空暫存物件
         this.tempProduct = {
           imagesUrl: []
         }
         this.isNew = true
-      } else if (isNew === 'edit') {
+      } else {
         // 以解構 淺拷貝一份出來修改，不然會直接修改原資料
         this.tempProduct = {
           ...item
         }
         this.isNew = false
-        this.$refs.adminProductModal.openModal()
       }
+      console.log(`this.$refs:${this.$refs}`)
+      this.$refs.adminProductModal.openModal()
     },
     // 刪除產品
     deleteProduct (product) {
@@ -156,26 +175,27 @@ export default {
             }
           })
           // .catch((error) => {
-          //   console.log(error, response.data.message)
+          //   console.log(error)
           // })
       }
-    },
-    mounted () {
-      this.getProducts()
-      // 取出token
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
-        '$1'
-      )
-      if (!token || token === '') {
-        alert('你尚未登入，請重新登入')
-        // window.location = "login.html"
-        this.$router.push('/login')
-      }
-      this.$http.defaults.headers.common.Authorization = `${token}`
-    },
-    created () {
     }
+  },
+  mounted () {
+    // 取出token
+    const token = document.cookie.replace(
+      /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+      '$1'
+    )
+    if (!token || token === '') {
+      alert('你尚未登入，請重新登入')
+      // window.location = "login.html"
+      this.$router.push('/login')
+    }
+    this.$http.defaults.headers.common.Authorization = `${token}`
+  },
+  created () {
+    console.log('created')
+    this.getProducts()
   }
 }
 </script>

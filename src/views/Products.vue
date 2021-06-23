@@ -123,7 +123,6 @@ export default {
             alert(res.data.message)
             this.isLoading = false
             this.$refs.productModal.hideModal()
-            this.getAllCart()
           } else {
             alert(res.data.message)
           }

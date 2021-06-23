@@ -1,9 +1,8 @@
 <template>
   <!-- productModal Template -->
-  <!-- <script type="text/x-template" id="productModal"> -->
   <div
     id="adminProductModal"
-    ref="adminProductModal"
+    ref="modal"
     class="modal fade"
     tabindex="-1"
     role="dialog"
@@ -33,27 +32,27 @@
               <div class="form-group">
                 <label for="imageUrl">主要圖片網址</label>
                 <input
-                  v-model="product.imageUrl"
+                  v-model.trim="tempProduct.imageUrl"
                   id="imageUrl"
                   type="text"
                   class="form-control"
                   placeholder="請輸入主要圖片網址"
                 />
-                <img :src="product.imageUrl" class="img-fluid" />
+                <img :src="tempProduct.imageUrl" class="img-fluid" />
               </div>
               <!-- 多圖 -->
               <div class="mb-1">多圖新增</div>
-              <div v-if="Array.isArray(product.imagesUrl)">
+              <div v-if="Array.isArray(tempProduct.imagesUrl)">
                 <!-- for 渲染圖片 -->
                 <div
-                  v-for="(image, index) in product.imagesUrl"
+                  v-for="(image, index) in tempProduct.imagesUrl"
                   :key="index"
                   class="mb-1"
                 >
                   <div class="form-group">
                     <label for="imagesUrl">圖片網址{{ index + 1 }}</label>
                     <input
-                      v-model="product.imagesUrl[index]"
+                      v-model="tempProduct.imagesUrl[index]"
                       :name="index + 1"
                       type="text"
                       class="from-control"
@@ -63,7 +62,7 @@
                   <!-- 增加刪除按鈕 -->
                   <div class="position-relative">
                     <button
-                      @click="product.imagesUrl.splice(index, 1)"
+                      @click.prevent="tempProduct.imagesUrl.splice(index, 1)"
                       type="button"
                       class="position-absolute bottom-0 end-0"
                       btn
@@ -78,12 +77,12 @@
 
                 <div
                   v-if="
-                    !product.imagesUrl.length ||
-                    product.imagesUrl[product.imagesUrl.length - 1]
+                    !tempProduct.imagesUrl.length ||
+                    tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]
                   "
                 >
                   <button
-                    @click="product.imagesUrl.push('')"
+                    @click.prevent="tempProduct.imagesUrl.push('')"
                     class="btn btn-outline-primary btn-sm d-block w-100"
                   >
                     新增圖片
@@ -92,7 +91,7 @@
                 <div v-else>
                   <button
                     title="刪除圖片"
-                    @click="product.imagesUrl.pop()"
+                    @click.prevent="tempProduct.imagesUrl.pop()"
                     class="btn btn-outline-danger btn-sm d-block w-100"
                   >
                     刪除圖片
@@ -102,7 +101,7 @@
               <div v-else>
                 <!-- 如沒裝 img 的 Array 就新增一組 Array -->
                 <button
-                  @click="createImages"
+                  @click.prevent="createImages"
                   class="btn btn-outline-primary btn-sm d-block w-100"
                 >
                   新增圖片
@@ -114,7 +113,7 @@
               <div class="form-group">
                 <label for="title">標題</label>
                 <input
-                  v-model="product.title"
+                  v-model="tempProduct.title"
                   id="title"
                   type="text"
                   class="form-control"
@@ -126,7 +125,7 @@
                 <div class="form-group col-md-6">
                   <label for="category">分類</label>
                   <input
-                    v-model="product.category"
+                    v-model="tempProduct.category"
                     id="category"
                     type="text"
                     class="form-control"
@@ -136,7 +135,7 @@
                 <div class="form-group col-md-6">
                   <label for="price">單位</label>
                   <input
-                    v-model="product.unit"
+                    v-model="tempProduct.unit"
                     id="unit"
                     type="unit"
                     class="form-control"
@@ -149,7 +148,7 @@
                 <div class="form-group col-md-6">
                   <label for="origin_price">原價</label>
                   <input
-                    v-model.number="product.origin_price"
+                    v-model.number="tempProduct.origin_price"
                     id="origin_price"
                     type="number"
                     min="0"
@@ -160,7 +159,7 @@
                 <div class="form-group col-md-6">
                   <label for="price">售價</label>
                   <input
-                    v-model.number="product.price"
+                    v-model.number="tempProduct.price"
                     id="price"
                     type="number"
                     min="0"
@@ -174,7 +173,7 @@
               <div class="form-group">
                 <label for="description">產品描述</label>
                 <textarea
-                  v-model.number="product.description"
+                  v-model.number="tempProduct.description"
                   id="description"
                   type="text"
                   class="form-control"
@@ -184,7 +183,7 @@
               <div class="form-group">
                 <label for="content">說明內容</label>
                 <textarea
-                  v-model="product.content"
+                  v-model="tempProduct.content"
                   id="content"
                   type="text"
                   class="form-control"
@@ -194,7 +193,7 @@
               <div class="form-group">
                 <div class="form-check">
                   <input
-                    v-model="product.is_enabled"
+                    v-model="tempProduct.is_enabled"
                     id="is_enabled"
                     :true-value="1"
                     :false-value="0"
@@ -218,7 +217,9 @@
           >
             取消
           </button>
-          <button @click="updateProduct" type="button" class="btn btn-primary">
+          <button
+            @click="$emit('update-product', tempProduct)"
+            type="button" class="btn btn-primary">
             確認
           </button>
         </div>
@@ -230,6 +231,7 @@
 <script>
 import Modal from 'bootstrap/js/dist/modal'
 export default {
+  // props: ['propsProduct', 'isNew'],
   props: {
     propsProduct: {
       type: Object,
@@ -238,62 +240,32 @@ export default {
           imagesUrl: []
         }
       }
-    },
-    isNew: {
-      type: Boolean,
-      default: false
     }
+    // isNew: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
   data () {
     return {
       modal: '',
-      tempProduct: {}
+      tempProduct: {},
+      isNew: false
     }
   },
   watch: { // 待查正確使用方法
     product () {
-      this.tempProduct = this.product
+      this.tempProduct = this.propsProduct
     }
   },
   mounted () {
-    this.modal = new Modal(this.$refs.adminProductModal, {
+    this.modal = new Modal(this.$refs.modal, {
       keyboard: false,
       backdrop: 'static'
     })
+    console.log(this.modal)
   },
-  // watch: { // 待查正確使用方法
-  //   product () {
-  //     this.tempProduct = this.product
-  //   }
-  // },
   methods: {
-    // 新增/更新產品
-    updateProduct (product) {
-      // 新增
-      let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`
-      let httpMethod = 'post'
-      if (!this.isNew) {
-        url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.product.id}`
-        httpMethod = 'put'
-        this.$emit('emitUpdate')
-      }
-      // 使用[]物件取值
-      this.http[httpMethod](url, {
-        data: this.product
-      })
-        .then((response) => {
-          if (response.data.success) {
-            alert(response.data.message)
-            this.hideModal()
-            this.$emit('emitUpdate')
-          } else {
-            alert(response.data.message)
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
     // 新增多圖片陣列
     createImages () {
       this.product.imagesUrl = [] // 複數
