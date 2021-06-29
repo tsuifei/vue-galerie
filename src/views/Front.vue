@@ -1,6 +1,6 @@
 <template>
   <div class="front">
-    <!-- <NavBar /> -->
+    <!-- <NavBar />
     <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom">
       <div class="container">
         <button
@@ -46,16 +46,24 @@
           </ul>
         </div>
       </div>
-    </nav>
-
+    </nav> -->
+    <NavBar></NavBar>
     <router-view class="container"></router-view>
   </div>
 </template>
 
 <script>
+import NavBar from '../components/NavBar.vue'
 // @ is an alias to /src
 export default {
-  name: 'Front'
+  name: 'Front',
+  data () {
+    return {
+    }
+  },
+  components: {
+    NavBar
+  }
 }
 </script>
 <style scoped>

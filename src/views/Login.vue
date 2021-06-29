@@ -43,18 +43,18 @@ export default {
       user: {
         username: '',
         password: ''
-      }
+      },
+      isLoading: false
     }
   },
   methods: {
     signIn () {
+      this.isLoading = true
       const apiUrl = `${process.env.VUE_APP_API}admin/signin`
-
       this.$http
         .post(apiUrl, this.user)
         .then((response) => {
-          console.log(response)
-
+          this.isLoading = false
           if (response.data.success) {
             alert(response.data.message)
             // success 取 token 存入 cookie

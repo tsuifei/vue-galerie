@@ -21,12 +21,16 @@
                 class="list-image"
             /></a>
           </td>
-          <td>{{ item.title }}</td>
+          <td>
+            <!-- 以頁面顯示單一產品頁 -->
+            <router-link :to="`/product/${item.id}`">{{ item.title }}</router-link>
+          </td>
           <td>
             <del>原價：{{ item.origin_price }}元</del>
             <div>優惠價：{{ item.price }}元</div>
           </td>
           <td>
+            <!-- 使用 Modal 開啟單一商品 -->
             <div class="btn-group btn-group-sm">
               <button
                 @click="getModalProduct(item.id)"
@@ -51,14 +55,17 @@
     <div class="col-6">
       <pagination :page="pagination" @get-products="getProducts"></pagination>
     </div>
-    <!-- 單一產品Modal  -->
+      <!-- 單一產品Modal  -->
       <product-modal ref="productModal" :product="product" @add-to-cart="addToCart"></product-modal>
+      <!-- loading -->
+      <loading :active.sync="isLoading"></loading>
   </div>
 </template>
 
 <script>
 import pagination from '@/components/Pagination.vue'
 import productModal from '@/components/ProductModal.vue'
+import emitter from '../assets/javascript/emitter'
 export default {
   // name: "Products",
   data () {
@@ -66,20 +73,21 @@ export default {
       products: [],
       product: {},
       cartsData: {},
-      isLoading: true,
+      isLoading: false,
       pagination: {}
     }
   },
   methods: {
     // Get 所有商品
     getProducts (page = 1) {
+      this.isLoading = true
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`
       this.$http
         .get(url)
         .then((res) => {
           if (res.data.success) {
-            this.products = res.data.products
             this.isLoading = false
+            this.products = res.data.products
             this.pagination = res.data.pagination
           } else {
             alert(res.data.message)
@@ -91,13 +99,14 @@ export default {
     },
     // Get 單一商品(Modal)
     getModalProduct (id) {
+      this.isLoading = true
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`
       this.$http
         .get(url)
         .then((res) => {
           if (res.data.success) {
-            console.log('ok?')
             this.product = res.data.product
+            this.isLoading = false
             this.$refs.productModal.showModal()
           } else {
             alert(res.data.message)
@@ -120,6 +129,7 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
+            emitter.emit('updata-cart')
             alert(res.data.message)
             this.isLoading = false
             this.$refs.productModal.hideModal()
@@ -130,6 +140,12 @@ export default {
           console.log(err)
         })
     }
+    // addLoading () {
+    //   const loader = this.$Loading.show()
+    //   setTimeout(() => {
+    //     loader = hide()
+    //   }, 3000)
+    // }
   },
   components: {
     productModal,

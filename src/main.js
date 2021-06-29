@@ -6,6 +6,12 @@ import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate'
 import rules from '@vee-validate/rules'
 import { localize, setLocale } from '@vee-validate/i18n'
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
+// ES Module site Effect 方式導入
+import 'bootstrap'
+// Loading component
+import Loading from 'vue-loading-overlay'
+// Loading style
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 import App from './App.vue'
 import router from './router'
@@ -31,5 +37,7 @@ app.use(router)
 app.component('Form', Form)
 app.component('Field', Field)
 app.component('ErrorMessage', ErrorMessage)
+// Loading
+app.component('Loading', Loading)
 
 app.mount('#app')

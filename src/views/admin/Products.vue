@@ -123,13 +123,13 @@ export default {
         // this.$emit('emitUpdate')
       }
       // 使用[]物件取值
-      this.http[httpMethod](url, {
+      this.$http[httpMethod](url, {
         data: this.tempProduct
       })
         .then((response) => {
           if (response.data.success) {
             alert(response.data.message)
-            this.$refs.AdminProductModal.hideModal()
+            this.$refs.adminProductModal.hideModal()
             this.getProducts(this.page)
             // this.$emit('emitUpdate')
           } else {
@@ -157,8 +157,8 @@ export default {
         }
         this.isNew = false
       }
-      console.log(`this.$refs:${this.$refs}`)
-      this.$refs.adminProductModal.openModal()
+      // console.log(`this.$refs:${this.$refs}`)
+      this.$refs.adminProductModal.showModal()
     },
     // 刪除產品
     deleteProduct (product) {
@@ -174,9 +174,9 @@ export default {
               alert(response.data.message)
             }
           })
-          // .catch((error) => {
-          //   console.log(error)
-          // })
+          .catch((error) => {
+            console.log(error)
+          })
       }
     }
   },

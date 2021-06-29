@@ -1,6 +1,7 @@
 <template>
   <!-- 後台 -->
   <div>
+    <!-- Admin NavBar
     <nav class="navbar navbar-expand-md navbar-dark bg-dark border-bottom">
       <div class="container">
         <router-link to="/admin" class="navbar-brand nav-link">
@@ -27,12 +28,14 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </nav> -->
+    <AdminNavBar></AdminNavBar>
     <router-view v-if="checkSuccess" class="container" />
   </div>
 </template>
 
 <script>
+import AdminNavBar from '../components/AdminNevBar.vue'
 export default {
   name: 'Dashboard',
   data () {
@@ -40,6 +43,9 @@ export default {
       api_token: '',
       checkSuccess: false
     }
+  },
+  components: {
+    AdminNavBar
   },
   methods: {
     checkLogin () {
@@ -70,11 +76,6 @@ export default {
         alert('尚未登入喔')
         this.$router.push('/login')
       }
-    },
-    signOut () {
-      document.cookie = 'hexToken=;expires=;'
-      alert('Token 已清除，你已登出')
-      this.$router.push('/login')
     }
   },
   created () {

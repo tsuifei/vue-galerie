@@ -233,6 +233,7 @@ import Modal from 'bootstrap/js/dist/modal'
 export default {
   // props: ['propsProduct', 'isNew'],
   props: {
+    // 重外層取來的資料
     propsProduct: {
       type: Object,
       default () {
@@ -240,30 +241,29 @@ export default {
           imagesUrl: []
         }
       }
+    },
+    isNew: {
+      type: Boolean,
+      default: false
     }
-    // isNew: {
-    //   type: Boolean,
-    //   default: false
-    // }
   },
   data () {
     return {
       modal: '',
-      tempProduct: {},
-      isNew: false
+      tempProduct: {}
     }
   },
   watch: { // 待查正確使用方法
-    product () {
+    propsProduct () {
       this.tempProduct = this.propsProduct
     }
   },
+  emits: ['update-product'],
   mounted () {
     this.modal = new Modal(this.$refs.modal, {
       keyboard: false,
       backdrop: 'static'
     })
-    console.log(this.modal)
   },
   methods: {
     // 新增多圖片陣列

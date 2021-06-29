@@ -1,0 +1,8 @@
+/* 1. 先把 Functions 帶出來 */
+@import "~bootstrap/scss/functions";
+
+/* 自定義樣式 variables */
+@import "./helpers/variables";
+
+/* 引入 Bootstrap */
+@import "~bootstrap/scss/bootstrap";
