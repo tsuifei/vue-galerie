@@ -164,6 +164,7 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
+            emitter.emit('update-cart')
             alert(res.data.message)
             this.isLoading = false
             this.$refs.productModal.hideModal()
@@ -178,7 +179,7 @@ export default {
     // Put 修改購物車 待補充 未完
     updateCart (item) {
       this.isLoading = true
-      console.log('updateCart_OK')
+      // console.log('updateCart_OK')
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
       const newQty = {
         product_id: item.id,
@@ -190,7 +191,7 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
-            emitter.emit('updata-cart')
+            emitter.emit('update-cart')
             alert(res.data.message)
             this.isLoading = false
             this.getAllCart()
@@ -209,7 +210,7 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.isLoading = false
-            emitter.emit('updata-cart')
+            emitter.emit('update-cart')
             this.getAllCart()
           } else {
             alert(res.data.message)
@@ -245,6 +246,7 @@ export default {
       this.$http.delete(url)
         .then((res) => {
           if (res.data.success) {
+            emitter.emit('update-cart')
             this.isLoading = false
             alert(res.data.message)
             this.getAllCart()

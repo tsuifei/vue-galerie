@@ -129,7 +129,7 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
-            emitter.emit('updata-cart')
+            emitter.emit('update-cart')
             alert(res.data.message)
             this.isLoading = false
             this.$refs.productModal.hideModal()

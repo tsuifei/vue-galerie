@@ -89,6 +89,7 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
+            // emitter.emit('*')
             emitter.emit('update-cart')
             alert(res.data.message)
             this.isLoading = false

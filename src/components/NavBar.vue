@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import emitter from '../assets/javascript/emitter'
+import emitter from '@/assets/javascript/emitter'
 export default {
   data () {
     return {
@@ -93,6 +93,11 @@ export default {
     emitter.on('update-cart', () => {
       this.getCart()
     })
+    // emitter.on('*', () => {
+    //   this.getCart()
+    // })
+    // listen to all events
+    // emitter.on('*', (type, e) => console.log(type, e) )
   }
 }
 </script>
