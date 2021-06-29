@@ -1,7 +1,6 @@
 <template>
   <div class="login">
     <h1>login 頁面</h1>
-    <!-- <button type="button" @click="signIn">去後台</button> -->
     <Form v-slot="{ errors }" @submit="signIn">
       <div class="mb3">
         <label for="email" class="form-label">Email</label>
@@ -33,11 +32,14 @@
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </Form>
+    <!-- loading -->
+    <loading :active.sync="isLoading"></loading>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'Login',
   data () {
     return {
       user: {
@@ -49,8 +51,8 @@ export default {
   },
   methods: {
     signIn () {
-      this.isLoading = true
       const apiUrl = `${process.env.VUE_APP_API}admin/signin`
+      this.isLoading = true
       this.$http
         .post(apiUrl, this.user)
         .then((response) => {
@@ -66,6 +68,7 @@ export default {
             this.$router.push('/admin/products')
           } else {
             alert(response.data.message)
+            this.isLoading = false
           }
         })
         .catch((error) => {

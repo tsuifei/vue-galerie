@@ -52,7 +52,7 @@
               width="32"
               height="32"
             />
-            <div class="cart-num rounded-pill bg-danger text-white position-absolute px-1">{{ cartsLength }}</div>
+            <div class="cart-num rounded-pill bg-danger text-white position-absolute px-1">{{ cart.carts.length }}</div>
           </router-link>
         </div>
       </div>
@@ -67,8 +67,8 @@ export default {
     return {
       cart: {
         carts: {}
-      },
-      cartsLength: 0
+      }
+      // cartsLength: 0
     }
   },
   methods: {
@@ -77,9 +77,9 @@ export default {
       this.$http.get(url)
         .then((res) => {
           if (res.data.success) {
-            // console.log(res.data.data)
             this.cart = res.data.data
-            this.cartsLength = this.cart.carts.length
+            // this.cartsLength = this.cart.carts.length
+            // console.log(this.cartsLength)
           } else {
             alert(res.data.message)
           }

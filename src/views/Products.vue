@@ -1,6 +1,6 @@
 <template>
   <div class="products">
-    <h1>W6 產品列表 購物車 表單驗證</h1>
+    <h1>前台產品列表</h1>
     <!-- 產品列表  -->
     <table class="table align-middle mt-4">
       <thead class="table align-middle">
@@ -140,12 +140,6 @@ export default {
           console.log(err)
         })
     }
-    // addLoading () {
-    //   const loader = this.$Loading.show()
-    //   setTimeout(() => {
-    //     loader = hide()
-    //   }, 3000)
-    // }
   },
   components: {
     productModal,

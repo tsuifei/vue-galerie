@@ -125,16 +125,19 @@
         </div>
       </Form>
     </div>
+    <!-- loading -->
+    <loading :active.sync="isLoading"></loading>
   </div>
 </template>
 
 <script>
+import emitter from '../assets/javascript/emitter'
 export default {
   data () {
     return {
       cartsData: {},
       final_total: 0,
-      isLoading: true,
+      isLoading: false,
       form: {
         user: {
           email: '',
@@ -187,6 +190,7 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
+            emitter.emit('updata-cart')
             alert(res.data.message)
             this.isLoading = false
             this.getAllCart()
@@ -205,6 +209,7 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.isLoading = false
+            emitter.emit('updata-cart')
             this.getAllCart()
           } else {
             alert(res.data.message)
@@ -215,11 +220,12 @@ export default {
     },
     // get 取得全部購物車
     getAllCart () {
-      console.log('getAllCart_OK')
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
+      this.isLoading = true
       this.$http.get(url)
         .then((res) => {
           if (res.data.success) {
+            this.isLoading = false
             this.cartsData = res.data.data
             this.final_total = res.data.data.final_total
             if (this.final_total === 0) {

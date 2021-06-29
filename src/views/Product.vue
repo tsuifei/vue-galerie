@@ -45,6 +45,8 @@
           </div>
         </div>
       </div>
+    <!-- loading -->
+    <loading :active.sync="isLoading"></loading>
   </div>
 </template>
 
@@ -87,9 +89,9 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
+            emitter.emit('update-cart')
             alert(res.data.message)
             this.isLoading = false
-            emitter.emit('updata-cart')
           } else {
             alert(res.data.message)
           }
