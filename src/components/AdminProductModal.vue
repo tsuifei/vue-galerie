@@ -132,7 +132,7 @@
                     placeholder="請輸入分類"
                   />
                 </div>
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                   <label for="price">單位</label>
                   <input
                     v-model="tempProduct.unit"
@@ -141,7 +141,7 @@
                     class="form-control"
                     placeholder="請輸入單位"
                   />
-                </div>
+                </div> -->
               </div>
 
               <div class="form-row">
@@ -169,7 +169,16 @@
                 </div>
               </div>
               <hr />
-
+              <div class="form-group">
+                <label for="artist">藝術家</label>
+                <input
+                  v-model.number="tempProduct.artist"
+                  id="artist"
+                  type="text"
+                  class="form-control"
+                  placeholder="請輸入藝術加名稱"
+                >
+              </div>
               <div class="form-group">
                 <label for="description">產品描述</label>
                 <textarea
@@ -180,6 +189,7 @@
                   placeholder="請輸入產品描述"
                 ></textarea>
               </div>
+
               <div class="form-group">
                 <label for="content">說明內容</label>
                 <textarea
@@ -238,7 +248,8 @@ export default {
       type: Object,
       default () {
         return {
-          imagesUrl: []
+          imagesUrl: [],
+          artist: ''
         }
       }
     },

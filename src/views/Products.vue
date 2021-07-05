@@ -2,7 +2,7 @@
   <div class="products">
     <h1>前台產品列表</h1>
     <!-- 產品列表  -->
-    <table class="table align-middle mt-4">
+    <!-- <table class="table align-middle mt-4">
       <thead class="table align-middle">
         <tr>
           <th>圖片</th>
@@ -21,17 +21,17 @@
                 class="list-image"
             /></a>
           </td>
-          <td>
+          <td> -->
             <!-- 以頁面顯示單一產品頁 -->
-            <router-link :to="`/product/${item.id}`">{{ item.title }}</router-link>
+            <!-- <router-link :to="`/product/${item.id}`">{{ item.title }}</router-link>
           </td>
           <td>
-            <del>原價：{{ item.origin_price }}元</del>
-            <div>優惠價：{{ item.price }}元</div>
+            <del>{{ item.origin_price }} €</del>
+            <div>{{ item.price }} €</div>
           </td>
-          <td>
+          <td> -->
             <!-- 使用 Modal 開啟單一商品 -->
-            <div class="btn-group btn-group-sm">
+            <!-- <div class="btn-group btn-group-sm">
               <button
                 @click="getModalProduct(item.id)"
                 type="button"
@@ -50,22 +50,32 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
+<!-- ----product block-- -->
+    <!-- <section class="container">
+      <div class="py-3">
+        <ul class="row list-unstyled"> -->
+          <ProductBlock :products='products'></ProductBlock>
+        <!-- </ul>
+      </div>
+    </section> -->
+<!-- ----product block-- -->
     <!-- pagination bloc  -->
     <div class="col-6">
       <pagination :page="pagination" @get-products="getProducts"></pagination>
     </div>
       <!-- 單一產品Modal  -->
-      <product-modal ref="productModal" :product="product" @add-to-cart="addToCart"></product-modal>
+      <!-- <product-modal ref="productModal" :product="product" @add-to-cart="addToCart"></product-modal> -->
       <!-- loading -->
       <loading :active.sync="isLoading"></loading>
   </div>
 </template>
 
 <script>
-import pagination from '@/components/Pagination.vue'
-import productModal from '@/components/ProductModal.vue'
-import emitter from '../assets/javascript/emitter'
+import Pagination from '@/components/Pagination.vue'
+// import productModal from '@/components/ProductModal.vue'
+import ProductBlock from '@/components/ProductBlock.vue'
+// import emitter from '../assets/javascript/emitter'
 export default {
   // name: "Products",
   data () {
@@ -96,54 +106,55 @@ export default {
         .catch((err) => {
           console.log(err)
         })
-    },
-    // Get 單一商品(Modal)
-    getModalProduct (id) {
-      this.isLoading = true
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`
-      this.$http
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            this.product = res.data.product
-            this.isLoading = false
-            this.$refs.productModal.showModal()
-          } else {
-            alert(res.data.message)
-          }
-        }).catch((err) => {
-          console.log(err)
-        })
-    },
-    // Post 增加購物車
-    addToCart (id, qty = 1) {
-      this.isLoading = true
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      const cart = {
-        product_id: id,
-        qty: qty
-      }
-      this.$http
-        .post(url, {
-          data: cart
-        })
-        .then((res) => {
-          if (res.data.success) {
-            emitter.emit('update-cart')
-            alert(res.data.message)
-            this.isLoading = false
-            this.$refs.productModal.hideModal()
-          } else {
-            alert(res.data.message)
-          }
-        }).catch((err) => {
-          console.log(err)
-        })
     }
+    // Get 單一商品(Modal)
+    // getModalProduct (id) {
+    //   this.isLoading = true
+    //   const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`
+    //   this.$http
+    //     .get(url)
+    //     .then((res) => {
+    //       if (res.data.success) {
+    //         this.product = res.data.product
+    //         this.isLoading = false
+    //         this.$refs.productModal.showModal()
+    //       } else {
+    //         alert(res.data.message)
+    //       }
+    //     }).catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
+    // // Post 增加購物車
+    // addToCart (id, qty = 1) {
+    //   this.isLoading = true
+    //   const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
+    //   const cart = {
+    //     product_id: id,
+    //     qty: qty
+    //   }
+    //   this.$http
+    //     .post(url, {
+    //       data: cart
+    //     })
+    //     .then((res) => {
+    //       if (res.data.success) {
+    //         emitter.emit('update-cart')
+    //         alert(res.data.message)
+    //         this.isLoading = false
+    //         this.$refs.productModal.hideModal()
+    //       } else {
+    //         alert(res.data.message)
+    //       }
+    //     }).catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
   },
   components: {
-    productModal,
-    pagination
+    // productModal,
+    Pagination,
+    ProductBlock
   },
   created () {
     this.getProducts()
@@ -152,7 +163,7 @@ export default {
 </script>
 
 <style scoped>
-.list-image {
+/* .list-image {
   width: 200px;
-}
+} */
 </style>

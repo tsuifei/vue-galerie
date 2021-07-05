@@ -12,6 +12,8 @@ import 'bootstrap'
 import Loading from 'vue-loading-overlay'
 // Loading style
 import 'vue-loading-overlay/dist/vue-loading.css'
+// Formats
+import { formatDate } from './assets/javascript/formats'
 
 import App from './App.vue'
 import router from './router'
@@ -30,9 +32,13 @@ setLocale('zh_Tw')
 
 const app = createApp(App)
 
+// 將 formats.js 裡的方法解構出來並加入 globalProperties 使其成全域使用
+app.config.globalProperties.$formats = {
+  formatDate
+}
+
 app.use(VueAxios, axios)
 app.use(router)
-
 // 表單驗證
 app.component('Form', Form)
 app.component('Field', Field)

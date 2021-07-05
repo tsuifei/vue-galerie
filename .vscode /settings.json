@@ -1,0 +1,7 @@
+{
+  "files.trimFinalNewlines": true, //刪除多餘空白
+  "files.insertFinalNewline": true,//結尾保留一個空白
+  "eslint.autoFixOnSave": true,//儲存時自動執行 ESLint 格式化
+  "vetur.validation.template": false,
+  "editor.formatOnSave": true
+}

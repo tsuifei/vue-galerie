@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // 'vue/no-multiple-template-root': 'off',
     //強制使用單引號
     quotes: ['error', 'single'],
     //強制不使用分號結尾
@@ -30,11 +31,12 @@ module.exports = {
       },
     ],
   },
-  },
   globals: {
     // 防止 Vue.js 報錯 error 'process' is not defined no-undef
     Atomics: "readonly",
     SharedArrayBuffer: "readonly",
     process: true,
-  },
-};
+  }
+}
+  
+

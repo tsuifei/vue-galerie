@@ -14,8 +14,9 @@
             </ol>
           </nav>
           <h2 class="fw-bold h1 mb-1">{{product.title}}</h2>
-          <p class="mb-0 text-muted text-end"><del>NT${{product.origin_price}}</del></p>
-          <p class="h4 fw-bold text-end">NT${{product.price}}</p>
+          <h5 class="fw-bold mb-1">{{product.artist}}</h5>
+          <p class="mb-0 text-muted text-end"><del>{{product.origin_price}} €</del></p>
+          <p class="h4 fw-bold text-end">{{product.price}} €</p>
           <div class="row align-items-center">
             <div class="col-12">
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quo, doloremque earum impedit maiores, ab et laudantium, facere aliquid expedita quasi numquam! Molestias nam quo quaerat, nemo sint consequatur cumque?
@@ -53,7 +54,7 @@
 <script>
 import emitter from '../assets/javascript/emitter'
 export default {
-  // name: 'Product',
+  name: 'Product',
   data () {
     return {
       product: {},

@@ -26,6 +26,11 @@
               </router-link>
             </li>
             <li class="nav-item">
+              <router-link to="/admin/coupons" class="nav-link">
+                優惠卷列表
+              </router-link>
+            </li>
+            <li class="nav-item">
               <a href="#" @click.prevent="signOut" class="nav-link"> 登出 </a>
             </li>
           </ul>

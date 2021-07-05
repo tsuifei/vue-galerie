@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="">
 <!-- <NavBar /> -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
       <div class="container">
@@ -21,12 +21,13 @@
         <!-- RWD 漢堡按鈕 Fin -->
         <div class="navbar-brand">
           <router-link to="/" class="navbar-brand">
-            <img
+            <!-- <img
               src="../assets/imgs/palette.svg"
               alt="Bootstrap"
               width="32"
               height="32"
-            />
+            /> -->
+            <img class="vue-logo" src="../assets/imgs/vue-logo.png" alt="Vue Galerie">
           </router-link>
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -109,6 +110,12 @@ export default {
 }
 *{
   /* border: 1px solid gold; */
+}
+header{
+  background: #edecf2;
+}
+.vue-logo{
+  width: 11rem;
 }
 
 </style>
