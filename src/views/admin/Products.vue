@@ -33,7 +33,12 @@
             <span class="" v-else>未啟用</span> -->
             <!-- --- -->
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" :id="item.id" :checked="item.is_enabled" @change="updateProduct(item, 'isEnabled')">
+              <input
+              class="form-check-input"
+              type="checkbox"
+              :id="item.id"
+              :checked="item.is_enabled" @change="updateProduct(item)"
+              >
               <label class="form-check-label" :for="item.id">{{ item.is_enabled ? '已啟用' : '未啟用' }}</label>
             </div>
           </td>
@@ -47,7 +52,7 @@
                 編輯
               </button>
               <button
-                @click="deleteProduct(item) "
+                @click="deleteProduct(item)"
                 type="button"
                 class="btn btn-sm btn-outline-danger btn-sm"
               >

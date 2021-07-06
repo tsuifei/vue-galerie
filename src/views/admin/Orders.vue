@@ -28,6 +28,14 @@
         </th>
         <th class="text-end border-secondary">{{order.total}}</th>
         <th width="200" class="border-secondary">{{order.is_paid}}</th>
+        <!-- ------ -->
+        <th width="200" class="border-secondary">
+          <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" :id="order.id" :checked="order.is_paid" >
+              <label class="form-check-label" :for="order.id">{{ order.is_paid ? '已付款' : '未付款' }}</label>
+          </div>
+        </th>
+        <!-- ------ -->
         <th class="border-secondary">
           <div class="btn-group">
             <button
@@ -76,11 +84,10 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.orders = res.data.orders
-            alert(res.data.message)
             this.pagination = res.data.pagination
             // console.log(res.data.orders)
           } else {
-            alert(res.data.message)
+            alert(`為取得訂單資料 ${res.data.messages}`)
           }
         })
         .catch((error) => {
@@ -89,6 +96,8 @@ export default {
     }
   },
   mounted () {
+  },
+  created () {
     this.getOrders()
   }
 }

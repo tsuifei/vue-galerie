@@ -32,7 +32,13 @@
       <td>{{$formats.formatDate(coupon.due_date)}}</td>
       <td>
         <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" :id="coupon.id" :checked="coupon.is_enabled" @change="updateCoupon(coupon, 'isEnabled')">
+          <input
+          class="form-check-input"
+          type="checkbox"
+          :id="coupon.id"
+          :checked="coupon.is_enabled"
+          @change="updateCoupon(coupon)"
+          >
           <label class="form-check-label" :for="coupon.id">{{ coupon.is_enabled ? '已啟用' : '未啟用' }}</label>
         </div>
         <!-- <span v-if="coupon.is_enabled" class="text-success">啟用</span>
@@ -129,9 +135,6 @@ export default {
     updateCoupon (item) {
       // console.log('updateCoupont ok')
       this.tempCoupon = item
-      console.log(typeof this.tempCoupon.is_enabled)
-      this.tempCoupon.is_enabled = !this.tempCoupon.is_enabled
-
       // 新增
       let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`
       let httpMethod = 'post'
@@ -140,16 +143,16 @@ export default {
         httpMethod = 'put'
         // this.$emit('emitUpdate')
       }
-      // 使用[]物件取值
+      this.tempCoupon.is_enabled = !this.tempCoupon.is_enabled
+      // 使用[]物件取值 更新
       this.$http[httpMethod](url, {
         data: this.tempCoupon
       })
         .then((response) => {
-          if (response.data.success) {
-            alert(response.data.message)
+          if (response.data.succes) {
+            alert(response.data.messages)
             this.$refs.adminCouponModal.hideModal()
             this.getCoupons(this.page)
-            // this.$emit('emitUpdate')
           } else {
             alert(response.data.message)
           }

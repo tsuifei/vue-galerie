@@ -10,3 +10,9 @@ export function formatDate (Milliseconds) {
   }
   return generalDate
 }
+
+// 處理日期的另一種寫法
+// export function formatDate (time) {
+//   const localDate = new Date(time * 1000)
+//   return localDate.toLocaleDateString()
+// }

@@ -14,7 +14,6 @@
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title" id="exampleModalLabel">
             {{ isNew ? '新增優惠券' : '修改優惠券' }}
-            <!-- <span>{{tempCoupon.title}}</span> -->
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -31,8 +30,6 @@
                   class="form-control"
                   placeholder="請輸入優惠名稱"
                 />
-              </div>
-              <div class="form-group">
                 <label for="code">Coupon Code</label>
                 <input
                   v-model="tempCoupon.code"
@@ -41,8 +38,6 @@
                   class="form-control"
                   placeholder="請輸入優惠碼"
                 />
-              </div>
-              <div class="form-group">
                 <label for="percent">Coupon Discount %</label>
                 <input
                   v-model.number="tempCoupon.percent"
@@ -51,8 +46,6 @@
                   class="form-control"
                   placeholder="請輸入折扣"
                 />
-              </div>
-              <div class="form-group">
                 <label for="due_date">Expiration date</label>
                 <input
                   v-model="due_date"
@@ -61,20 +54,8 @@
                   class="form-control"
                   placeholder="請輸入到期日"
                 />
-              </div>
-              <!-- ---- -->
-              <!-- <div class="mb-3">
-                <label for="due_date">到期日</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="due_date"
-                  v-model="due_date"
-                />
-              </div> -->
-              <!-- ---- -->
-              <div class="form-group">
-                <div class="form-check">
+              <!-- <div class="form-group"> -->
+                <div class="form-check form-switch">
                   <input
                     v-model="tempCoupon.is_enabled"
                     id="is_enabled"
@@ -115,7 +96,8 @@
 <script>
 import Modal from 'bootstrap/js/dist/modal'
 export default {
-  // 重外層取來的資料
+  // 外層取來的資料
+  // props: ['propsCoupon', 'isNew'],
   props: {
     propsCoupon: {
       type: Object,
@@ -126,6 +108,10 @@ export default {
     isNew: {
       type: Boolean,
       default: false
+    },
+    is_enabled: {
+      type: Number,
+      default: 1
     }
   },
   data () {
@@ -141,12 +127,10 @@ export default {
       this.tempCoupon = this.propsCoupon
       // console.log(this.tempCoupon)
       // 把日期轉回YYYY-MM-DD
-      // 還沒懂這部份
       const isoDateTime = new Date(this.tempCoupon.due_date * 1000)
         .toISOString().split('T');
       [this.due_date] = isoDateTime
-      console.log(isoDateTime)
-      // 還沒懂這部份
+      // console.log(isoDateTime)
     },
     due_date () {
       this.tempCoupon.due_date = Math.floor(new Date(this.due_date) / 1000)
