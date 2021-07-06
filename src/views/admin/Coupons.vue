@@ -5,7 +5,7 @@
     <div class="text-end mt-4">
       <!-- 新增 Button trigger modal -->
       <button
-        @click="openModal(true)"
+        @click="openCouponModal(true)"
         type="button"
         class="btn btn-primary"
       >
@@ -31,12 +31,16 @@
       <td>{{coupon.percent}} %</td>
       <td>{{$formats.formatDate(coupon.due_date)}}</td>
       <td>
-        <span v-if="coupon.is_enabled" class="text-success">啟用</span>
-        <span class="" v-else>未啟用</span>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" :id="coupon.id" :checked="coupon.is_enabled" @change="updateCoupon(coupon, 'isEnabled')">
+          <label class="form-check-label" :for="coupon.id">{{ coupon.is_enabled ? '已啟用' : '未啟用' }}</label>
+        </div>
+        <!-- <span v-if="coupon.is_enabled" class="text-success">啟用</span>
+        <span class="" v-else>未啟用</span> -->
       </td>
       <td>
         <button
-          @click="openModal(false, coupon)"
+          @click="openCouponModal(false, coupon)"
           type="button"
           class="btn btn-sm btn-outline-primary btn-sm"
         >
@@ -47,6 +51,7 @@
         <button
           type="button"
           class="btn btn-sm btn-outline-danger btn-sm"
+          @click="deleteCoupon(coupon)"
         >
         刪除
         </button>
@@ -57,7 +62,8 @@
   </section>
   <!-- pagination bloc  -->
     <div class="col-6">
-      <Pagination :page="pagination"></Pagination>
+      <Pagination :page="pagination"
+      @get-data="getCoupons"/>
     </div>
     <!-- loading -->
     <loading :active.sync="isLoading"></loading>
@@ -79,9 +85,14 @@ export default {
   data () {
     return {
       coupons: [],
-      tempCoupon: {},
+      tempCoupon: {
+        title: '',
+        percent: 100,
+        is_enabled: 0,
+        code: ''
+      },
       isLoading: false,
-      couponModal: '',
+      // couponModal: '',
       isNew: false,
       pagination: {},
       page: 1
@@ -114,10 +125,13 @@ export default {
           console.log(error)
         })
     },
-    // 新增/更新Coupon
-    updateCoupont (item) {
-      console.log('updateCoupont ok')
+    // 新增/更新 Coupon
+    updateCoupon (item) {
+      // console.log('updateCoupont ok')
       this.tempCoupon = item
+      console.log(typeof this.tempCoupon.is_enabled)
+      this.tempCoupon.is_enabled = !this.tempCoupon.is_enabled
+
       // 新增
       let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`
       let httpMethod = 'post'
@@ -134,7 +148,7 @@ export default {
           if (response.data.success) {
             alert(response.data.message)
             this.$refs.adminCouponModal.hideModal()
-            this.getCoupon(this.page)
+            this.getCoupons(this.page)
             // this.$emit('emitUpdate')
           } else {
             alert(response.data.message)
@@ -144,15 +158,34 @@ export default {
           console.log(error)
         })
     },
+    // 刪除Coupon
+    deleteCoupon (coupon) {
+      if (confirm(`確認刪除此${coupon.title} coupon?`)) {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${coupon.id}`
+        this.$http.delete(url)
+          .then((response) => {
+            console.log(response.data.message)
+            if (response.data.success) {
+              // alert(response.data.message);
+              this.getcoupons()
+            } else {
+              alert(response.data.message)
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
     // Modal 狀態切換
-    openModal (isNew, item) { // 參數帶(狀態,產品)
-      console.log('openModal OK')
+    openCouponModal (isNew, item) { // 參數帶(狀態,產品)
+      console.log('openCouponModal OK')
       this.isNew = isNew
       // 狀態: new
       if (this.isNew) {
         // 新增清空暫存物件
         this.tempCoupon = {
-          due_date: new Date().getTime() / 1000
+          due_date: Math.floor(Date.now() / 1000)
         }
         this.isNew = true
       } else {
@@ -165,48 +198,38 @@ export default {
       }
       // console.log(`this.$refs:${this.$refs}`)
       this.$refs.adminCouponModal.showModal()
+    },
+    addCoupons () {
+      // 新增 coupon
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`
+      this.$http.post(url, {
+        data: {
+          title: 'Thanksgiving Day',
+          percent: 10,
+          is_enabled: 1,
+          code: 'HappyDay',
+          due_date: Math.floor(Date.now() / 1000)
+        }
+      })
+        .then((response) => {
+          if (response.data.success) {
+            alert(response.data.message)
+            this.getCoupons(this.page)
+            // this.$emit('emitUpdate')
+          } else {
+            alert(response.data.message)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   },
   mounted () {
     this.getCoupons()
+    // this.addCoupons()
   }
 }
-/*
-[API]: /api/:api_path/admin/coupons?page=:page
-[方法]: get
-[說明]:
-  @api_path = 'thisismycourse2'
-  @page 當前第幾頁(分頁參數)
-  title(String)、is_enabled(Number)、percent(Number)、due_date(Number)、code(String) 為必填欄位
-[成功回傳]:
-  {
-    "success": true,
-    "coupons": [
-      {
-          "due_date": 1555459200,
-          "id": "-L9u5Cgodczattv-7i8D",
-          "is_enabled": 1,
-          "percent": 70,
-          "title": "超級特惠價格2",
-      },
-      {
-          "due_date": 6547658,
-          "is_enabled": 1,
-          "percent": 80,
-          "title": "超級特惠價格",
-      }
-    ],
-    "pagination": {
-        "total_pages": 1,
-        "current_page": 1,
-        "has_pre": false,
-        "has_next": false,
-        "category": null
-    },
-    "messages": []
-  }
-  */
-
 </script>
 
 <style scoped>

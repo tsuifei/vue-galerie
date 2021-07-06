@@ -49,13 +49,13 @@
   </table>
   <!-- pagination bloc  -->
     <div class="col-6">
-      <pagination :page="pagination" @get-products="getProducts"></pagination>
+      <Pagination :page="pagination" @get-data="getOrders"/>
     </div>
   </div>
 </template>
 
 <script>
-import pagination from '@/components/Pagination.vue'
+import Pagination from '@/components/Pagination.vue'
 export default {
   data () {
     return {
@@ -66,7 +66,7 @@ export default {
     }
   },
   components: {
-    pagination
+    Pagination
   },
   methods: {
     getOrders (page = 1) {
@@ -77,7 +77,8 @@ export default {
           if (res.data.success) {
             this.orders = res.data.orders
             alert(res.data.message)
-            console.log(res.data.orders)
+            this.pagination = res.data.pagination
+            // console.log(res.data.orders)
           } else {
             alert(res.data.message)
           }
@@ -87,7 +88,7 @@ export default {
         })
     }
   },
-  created () {
+  mounted () {
     this.getOrders()
   }
 }

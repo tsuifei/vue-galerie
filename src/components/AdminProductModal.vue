@@ -202,17 +202,8 @@
               </div>
               <div class="form-group">
                 <div class="form-check">
-                  <input
-                    v-model="tempProduct.is_enabled"
-                    id="is_enabled"
-                    :true-value="1"
-                    :false-value="0"
-                    class="form-check-input"
-                    type="checkbox"
-                  />
-                  <label class="form-check-label" for="is_enabled">
-                    是否啟用
-                  </label>
+                  <input class="form-check-input" type="checkbox" :id="tempProduct.id" :checked="tempProduct.is_enabled" >
+                  <label class="form-check-label" :for="tempProduct.id">{{ tempProduct.is_enabled ? '已啟用' : '未啟用' }}</label>
                 </div>
               </div>
             </div>

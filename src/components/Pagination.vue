@@ -6,7 +6,7 @@
           class="page-link"
           href="#"
           aria-label="Previous"
-          @click.prevent="$emit('get-products', page.current_page - 1)"
+          @click.prevent="$emit('get-data', page.current_page - 1)"
         >
           <span aria-hidden="true">&laquo;</span>
         </a>
@@ -20,7 +20,7 @@
         <a
           class="page-link"
           href="#"
-          @click.prevent="$emit('get-products', item)"
+          @click.prevent="$emit('get-data', item)"
           >{{ item }}</a
         >
       </li>
@@ -30,7 +30,7 @@
           class="page-link"
           href="#"
           aria-label="Next"
-          @click.prevent="$emit('get-products', page.current_page + 1)"
+          @click.prevent="$emit('get-data', page.current_page + 1)"
         >
           <span aria-hidden="true">&raquo;</span>
         </a>
@@ -53,6 +53,11 @@ export default {
     watch: {
       pagination () {
         this.pages = this.pagination
+      }
+    },
+    methods: {
+      updatePage (page) {
+        this.$emit('emitPages', page)
       }
     }
   }

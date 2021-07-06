@@ -1,74 +1,17 @@
 <template>
-  <div class="products">
+  <section class="products">
     <h1>前台產品列表</h1>
     <!-- 產品列表  -->
-    <!-- <table class="table align-middle mt-4">
-      <thead class="table align-middle">
-        <tr>
-          <th>圖片</th>
-          <th>商品名稱</th>
-          <th>價格</th>
-          <th>商品介紹</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in products" :key="item.id">
-          <td>
-            <a href="#" @click="getModalProduct(item.id)"
-              ><img
-                :src="item.imageUrl"
-                :alt="`${item.title}圖片`"
-                class="list-image"
-            /></a>
-          </td>
-          <td> -->
-            <!-- 以頁面顯示單一產品頁 -->
-            <!-- <router-link :to="`/product/${item.id}`">{{ item.title }}</router-link>
-          </td>
-          <td>
-            <del>{{ item.origin_price }} €</del>
-            <div>{{ item.price }} €</div>
-          </td>
-          <td> -->
-            <!-- 使用 Modal 開啟單一商品 -->
-            <!-- <div class="btn-group btn-group-sm">
-              <button
-                @click="getModalProduct(item.id)"
-                type="button"
-                class="btn btn-outline-secondary"
-              >
-                查看商品資訊
-              </button>
-              <button
-                @click="addToCart(item.id)"
-                type="button"
-                class="btn btn-outline-danger"
-              >
-                加到購物車
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
-<!-- ----product block-- -->
-    <!-- <section class="container">
-      <div class="py-3">
-        <ul class="row list-unstyled"> -->
-          <ProductBlock :products='products'></ProductBlock>
-        <!-- </ul>
-      </div>
-    </section> -->
-<!-- ----product block-- -->
+    <ProductBlock :products='products'></ProductBlock>
     <!-- pagination bloc  -->
     <div class="col-6">
-      <pagination :page="pagination" @get-products="getProducts"></pagination>
+      <pagination :page="pagination" @get-data="getProducts"></pagination>
     </div>
       <!-- 單一產品Modal  -->
       <!-- <product-modal ref="productModal" :product="product" @add-to-cart="addToCart"></product-modal> -->
       <!-- loading -->
       <loading :active.sync="isLoading"></loading>
-  </div>
+  </section>
 </template>
 
 <script>

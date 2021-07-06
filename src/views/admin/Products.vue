@@ -29,8 +29,13 @@
           <td width="120">{{item.origin_price}}</td>
           <td width="120">{{item.price}}</td>
           <td width="100">
-            <span v-if="item.is_enabled" class="text-success">啟用</span>
-            <span class="" v-else>未啟用</span>
+            <!-- <span v-if="item.is_enabled" class="text-success">啟用</span>
+            <span class="" v-else>未啟用</span> -->
+            <!-- --- -->
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" :id="item.id" :checked="item.is_enabled" @change="updateProduct(item, 'isEnabled')">
+              <label class="form-check-label" :for="item.id">{{ item.is_enabled ? '已啟用' : '未啟用' }}</label>
+            </div>
           </td>
           <td>
             <div class="btn-group" width="120">
@@ -122,6 +127,7 @@ export default {
         httpMethod = 'put'
         // this.$emit('emitUpdate')
       }
+      this.tempProduct.is_enabled = !this.tempProduct.is_enabled
       // 使用[]物件取值
       this.$http[httpMethod](url, {
         data: this.tempProduct

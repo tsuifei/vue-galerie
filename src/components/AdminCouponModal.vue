@@ -45,7 +45,7 @@
               <div class="form-group">
                 <label for="percent">Coupon Discount %</label>
                 <input
-                  v-model="tempCoupon.percent"
+                  v-model.number="tempCoupon.percent"
                   id="percent"
                   type="number"
                   class="form-control"
@@ -53,15 +53,26 @@
                 />
               </div>
               <div class="form-group">
-                <label for="due_date">Coupon Discount %</label>
+                <label for="due_date">Expiration date</label>
                 <input
-                  v-model.number="tempCoupon.due_date"
+                  v-model="due_date"
                   id="due_date"
                   type="date"
                   class="form-control"
                   placeholder="請輸入到期日"
                 />
               </div>
+              <!-- ---- -->
+              <!-- <div class="mb-3">
+                <label for="due_date">到期日</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="due_date"
+                  v-model="due_date"
+                />
+              </div> -->
+              <!-- ---- -->
               <div class="form-group">
                 <div class="form-check">
                   <input
@@ -121,22 +132,24 @@ export default {
     return {
       couponModal: '',
       tempCoupon: {},
-      temp_due_date: ''
+      due_date: ''
     }
   },
   emits: ['emit-update-coupon'],
   watch: { // 待查正確使用方法
     propsCoupon () {
       this.tempCoupon = this.propsCoupon
+      // console.log(this.tempCoupon)
       // 把日期轉回YYYY-MM-DD
       // 還沒懂這部份
       const isoDateTime = new Date(this.tempCoupon.due_date * 1000)
         .toISOString().split('T');
-      [this.temp_due_date] = isoDateTime
+      [this.due_date] = isoDateTime
+      console.log(isoDateTime)
       // 還沒懂這部份
     },
-    temp_due_date () {
-      this.tempCoupon.due_date = Math.floor(new Date(this.temp_due_date) / 1000)
+    due_date () {
+      this.tempCoupon.due_date = Math.floor(new Date(this.due_date) / 1000)
     }
   },
   methods: {

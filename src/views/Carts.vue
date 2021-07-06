@@ -168,7 +168,7 @@ export default {
             alert(res.data.message)
             this.isLoading = false
             this.$refs.productModal.hideModal()
-            this.getAllCart()
+            this.getCarts()
           } else {
             alert(res.data.message)
           }
@@ -194,7 +194,7 @@ export default {
             emitter.emit('update-cart')
             alert(res.data.message)
             this.isLoading = false
-            this.getAllCart()
+            this.getCarts()
           } else {
             alert(res.data.message)
           }
@@ -211,7 +211,7 @@ export default {
           if (res.data.success) {
             this.isLoading = false
             emitter.emit('update-cart')
-            this.getAllCart()
+            this.getCarts()
           } else {
             alert(res.data.message)
           }
@@ -220,7 +220,7 @@ export default {
         })
     },
     // get 取得全部購物車
-    getAllCart () {
+    getCarts () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
       this.isLoading = true
       this.$http.get(url)
@@ -249,7 +249,7 @@ export default {
             emitter.emit('update-cart')
             this.isLoading = false
             alert(res.data.message)
-            this.getAllCart()
+            this.getCarts()
           } else {
             alert(res.data.message)
           }
@@ -273,7 +273,7 @@ export default {
             console.log(this.form)
             this.$refs.form.resetForm() // 為什麼一定要 $refs
             this.form.message = ''
-            this.getAllCart()
+            this.getCarts()
           } else {
             alert(res.data.message)
           }
@@ -283,10 +283,9 @@ export default {
     }
   },
   mounted () {
-
+    this.getCarts()
   },
   created () {
-    this.getAllCart()
   }
 }
 
