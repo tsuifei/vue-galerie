@@ -58,14 +58,14 @@
                 <div class="form-check form-switch">
                   <input
                     v-model="tempCoupon.is_enabled"
-                    id="is_enabled"
+                    :id="tempCoupon.id"
                     :true-value="1"
                     :false-value="0"
                     class="form-check-input"
                     type="checkbox"
                   />
-                  <label class="form-check-label" for="is_enabled">
-                    是否啟用
+                  <label class="form-check-label"
+                  :for="tempCoupon.id">{{ tempCoupon.is_enabled ? '已啟用' : '未啟用' }}
                   </label>
                 </div>
               </div>
@@ -85,7 +85,7 @@
           <button
             @click="$emit('emit-update-coupon', tempCoupon)"
             type="button" class="btn btn-primary">
-            確認更新
+            確認
           </button>
         </div>
       </div>

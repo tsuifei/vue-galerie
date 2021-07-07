@@ -35,14 +35,14 @@
           <input
           class="form-check-input"
           type="checkbox"
+          :true-value="1"
+          :false-value="0"
           :id="coupon.id"
           :checked="coupon.is_enabled"
           @change="updateCoupon(coupon)"
           >
           <label class="form-check-label" :for="coupon.id">{{ coupon.is_enabled ? '已啟用' : '未啟用' }}</label>
         </div>
-        <!-- <span v-if="coupon.is_enabled" class="text-success">啟用</span>
-        <span class="" v-else>未啟用</span> -->
       </td>
       <td>
         <button
@@ -74,7 +74,7 @@
     <!-- loading -->
     <loading :active.sync="isLoading"></loading>
     <!-- couponModal -->
-    <AdminCouponModal
+    <Admin-coupon-modal
       @emit-update-coupon="updateCoupon"
       ref="adminCouponModal"
       :propsCoupon = "tempCoupon"
@@ -98,7 +98,7 @@ export default {
         code: ''
       },
       isLoading: false,
-      // couponModal: '',
+      couponModal: {},
       isNew: false,
       pagination: {},
       page: 1
@@ -111,12 +111,11 @@ export default {
   methods: {
   // 取得產品列表
     getCoupons (page = 1) {
-      console.log('進來getCoupons')
+      // console.log('進來getCoupons')
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupons?page=${page}`
       this.$http.get(url)
         .then((response) => {
           this.isLoading = true
-          console.log('取得coupon列表')
           if (response.data.success) {
             this.coupons = response.data.coupons
             console.log(this.coupons)
@@ -133,7 +132,7 @@ export default {
     },
     // 新增/更新 Coupon
     updateCoupon (item) {
-      // console.log('updateCoupont ok')
+      console.log('updateCoupont ok')
       this.tempCoupon = item
       // 新增
       let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`
@@ -143,14 +142,14 @@ export default {
         httpMethod = 'put'
         // this.$emit('emitUpdate')
       }
-      this.tempCoupon.is_enabled = !this.tempCoupon.is_enabled
       // 使用[]物件取值 更新
       this.$http[httpMethod](url, {
         data: this.tempCoupon
       })
         .then((response) => {
           if (response.data.succes) {
-            alert(response.data.messages)
+            alert(response.data.message)
+            console.log(`this.$refs:${this.$refs}`)
             this.$refs.adminCouponModal.hideModal()
             this.getCoupons(this.page)
           } else {
@@ -170,7 +169,7 @@ export default {
             console.log(response.data.message)
             if (response.data.success) {
               // alert(response.data.message);
-              this.getcoupons()
+              this.getCoupons()
             } else {
               alert(response.data.message)
             }

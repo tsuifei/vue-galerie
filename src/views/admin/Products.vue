@@ -37,7 +37,8 @@
               class="form-check-input"
               type="checkbox"
               :id="item.id"
-              :checked="item.is_enabled" @change="updateProduct(item)"
+              :checked="item.is_enabled"
+              @change="updateProduct(item)"
               >
               <label class="form-check-label" :for="item.id">{{ item.is_enabled ? '已啟用' : '未啟用' }}</label>
             </div>
@@ -132,7 +133,7 @@ export default {
         httpMethod = 'put'
         // this.$emit('emitUpdate')
       }
-      this.tempProduct.is_enabled = !this.tempProduct.is_enabled
+      // this.tempProduct.is_enabled = !this.tempProduct.is_enabled
       // 使用[]物件取值
       this.$http[httpMethod](url, {
         data: this.tempProduct
@@ -205,7 +206,7 @@ export default {
     this.$http.defaults.headers.common.Authorization = `${token}`
   },
   created () {
-    console.log('created')
+    // console.log('created')
     this.getProducts()
   }
 }
