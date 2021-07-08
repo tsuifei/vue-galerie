@@ -87,7 +87,7 @@
 import Pagination from '@/components/Pagination.vue'
 import AdminCouponModal from '@/components/AdminCouponModal.vue'
 export default {
-  name: 'Coupons',
+  name: 'AdminCoupons',
   data () {
     return {
       coupons: [],
@@ -147,7 +147,7 @@ export default {
         data: this.tempCoupon
       })
         .then((response) => {
-          if (response.data.succes) {
+          if (response.data.success) {
             alert(response.data.message)
             console.log(`this.$refs:${this.$refs}`)
             this.$refs.adminCouponModal.hideModal()

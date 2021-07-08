@@ -23,6 +23,16 @@ const routes = [
         component: () => import('../views/Product.vue')
       },
       {
+        path: 'articles',
+        name: 'Articles',
+        component: () => import('../views/Articles.vue')
+      },
+      {
+        path: 'article/:id',
+        name: 'Article',
+        component: () => import('../views/Article.vue')
+      },
+      {
         path: 'login',
         name: 'Login',
         component: () => import('../views/Login.vue')
@@ -52,8 +62,13 @@ const routes = [
       },
       {
         path: 'coupons',
-        name: 'Coupons',
+        name: 'AdminCoupons',
         component: () => import('../views/admin/Coupons.vue')
+      },
+      {
+        path: 'articles',
+        name: 'AdminArticles',
+        component: () => import('../views/admin/Articles.vue')
       }
     ]
   },

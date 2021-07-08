@@ -31,6 +31,11 @@
               </router-link>
             </li>
             <li class="nav-item">
+              <router-link to="/admin/articles" class="nav-link">
+                文章列表
+              </router-link>
+            </li>
+            <li class="nav-item">
               <a href="#" @click.prevent="signOut" class="nav-link"> 登出 </a>
             </li>
           </ul>

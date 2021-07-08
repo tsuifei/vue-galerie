@@ -20,7 +20,7 @@ import Pagination from '@/components/Pagination.vue'
 import ProductBlock from '@/components/ProductBlock.vue'
 // import emitter from '../assets/javascript/emitter'
 export default {
-  // name: "Products",
+  name: 'Products',
   data () {
     return {
       products: [],

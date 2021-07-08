@@ -65,6 +65,7 @@
 <script>
 import Pagination from '@/components/Pagination.vue'
 export default {
+  name: 'AdminOrders',
   data () {
     return {
       orders: [],
