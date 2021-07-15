@@ -118,7 +118,7 @@ export default {
           this.isLoading = true
           if (response.data.success) {
             this.coupons = response.data.coupons
-            console.log(this.coupons)
+            // console.log(this.coupons)
             this.pagination = response.data.pagination
             this.isLoading = false
           } else {
@@ -132,7 +132,7 @@ export default {
     },
     // 新增/更新 Coupon
     updateCoupon (item) {
-      console.log('updateCoupont ok')
+      // console.log('updateCoupont ok')
       this.tempCoupon = item
       // 新增
       let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`
@@ -149,7 +149,7 @@ export default {
         .then((response) => {
           if (response.data.success) {
             alert(response.data.message)
-            console.log(`this.$refs:${this.$refs}`)
+            // console.log(this.$refs)
             this.$refs.adminCouponModal.hideModal()
             this.getCoupons(this.page)
           } else {
@@ -181,18 +181,15 @@ export default {
     },
     // Modal 狀態切換
     openCouponModal (isNew, item) { // 參數帶(狀態,產品)
-      console.log('openCouponModal OK')
+      // console.log('openCouponModal OK')
       this.isNew = isNew
       // 狀態: new
       if (this.isNew) {
-        // 新增清空暫存物件
         this.tempCoupon = {
           due_date: Math.floor(Date.now() / 1000)
         }
         this.isNew = true
       } else {
-        // 以解構 淺拷貝一份出來修改，不然會直接修改原資料
-        console.log(this.tempCoupon)
         this.tempCoupon = {
           ...item
         }
@@ -200,31 +197,6 @@ export default {
       }
       // console.log(`this.$refs:${this.$refs}`)
       this.$refs.adminCouponModal.showModal()
-    },
-    addCoupons () {
-      // 新增 coupon
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`
-      this.$http.post(url, {
-        data: {
-          title: 'Thanksgiving Day',
-          percent: 10,
-          is_enabled: 1,
-          code: 'HappyDay',
-          due_date: Math.floor(Date.now() / 1000)
-        }
-      })
-        .then((response) => {
-          if (response.data.success) {
-            alert(response.data.message)
-            this.getCoupons(this.page)
-            // this.$emit('emitUpdate')
-          } else {
-            alert(response.data.message)
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
     }
   },
   mounted () {

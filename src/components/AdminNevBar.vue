@@ -13,30 +13,30 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link to="/" class="nav-link"> 回到前台 </router-link>
+              <router-link to="/" class="nav-link"> Front | </router-link>
             </li>
             <li class="nav-item">
               <router-link to="/admin/products" class="nav-link">
-                產品列表
+                Products
               </router-link>
             </li>
             <li class="nav-item">
               <router-link to="/admin/orders" class="nav-link">
-                訂單列表
+                Orders
               </router-link>
             </li>
             <li class="nav-item">
               <router-link to="/admin/coupons" class="nav-link">
-                優惠卷列表
+                Coupons
               </router-link>
             </li>
             <li class="nav-item">
               <router-link to="/admin/articles" class="nav-link">
-                文章列表
+                Articles
               </router-link>
             </li>
             <li class="nav-item">
-              <a href="#" @click.prevent="signOut" class="nav-link"> 登出 </a>
+              <a href="#" @click.prevent="signOut" class="nav-link"> Sign Out </a>
             </li>
           </ul>
         </div>

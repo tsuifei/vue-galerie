@@ -14,7 +14,8 @@ import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 // Formats
 import { formatDate } from './assets/javascript/formats'
-
+// Rich text editor
+import CKEditor from '@ckeditor/ckeditor5-vue'
 import App from './App.vue'
 import router from './router'
 
@@ -43,6 +44,8 @@ app.use(router)
 app.component('Form', Form)
 app.component('Field', Field)
 app.component('ErrorMessage', ErrorMessage)
+// Rich text editor
+app.use(CKEditor)
 // Loading
 app.component('Loading', Loading)
 

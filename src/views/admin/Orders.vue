@@ -7,7 +7,7 @@
         <th width="100" class="text-center border-secondary">訂購人</th>
         <th class="border-secondary">聯絡信箱</th>
         <th class="border-secondary">連絡電話</th>
-        <th class="border-secondary">住址</th>
+        <!-- <th class="border-secondary">住址</th> -->
         <th class="border-secondary">商品</th>
         <th class="text-end border-secondary">總金額</th>
         <th width="200" class="border-secondary">付款狀態</th>
@@ -19,7 +19,7 @@
       <th width="100" class="text-center border-secondary">{{order.user.name}}</th>
         <th class="border-secondary">{{order.user.email}}</th>
         <th class="border-secondary">{{order.user.tel}}</th>
-        <th class="border-secondary">{{order.user.address}}</th>
+        <!-- <th class="border-secondary">{{order.user.address}}</th> -->
         <!-- <th class="border-secondary">{{order.products}}</th> -->
         <th class="border-secondary">
         <ul>
@@ -41,6 +41,7 @@
             <button
               class="btn btn-outline-primary btn-sm"
               type="button"
+              @click="openOrderModal(order)"
             >
               檢視
             </button>
@@ -59,11 +60,16 @@
     <div class="col-6">
       <Pagination :page="pagination" @get-data="getOrders"/>
     </div>
+    <!-- AdminOrderModal -->
+    <AdminOrderModal
+    ref="adminOrderModal"
+    />
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination.vue'
+import AdminOrderModal from '@/components/AdminOrderModal.vue'
 export default {
   name: 'AdminOrders',
   data () {
@@ -75,7 +81,8 @@ export default {
     }
   },
   components: {
-    Pagination
+    Pagination,
+    AdminOrderModal
   },
   methods: {
     getOrders (page = 1) {
@@ -94,6 +101,33 @@ export default {
         .catch((error) => {
           alert(error)
         })
+    },
+    // 新增/更新 Coupon
+    updateOrder (item) {
+      console.log('updateOrder OK')
+      this.tempOrder = item
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempOrder.id}`
+      this.$http.put(url, {
+        data: this.tempOrder
+      })
+        .then((response) => {
+          if (response.data.success) {
+            alert(response.data.message)
+
+            this.$refs.adminOrderModal.hideModal()
+            this.getCoupons(this.page)
+          } else {
+            alert(response.data.message)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    openOrderModal (item) {
+      this.tempOrder = { ...item }
+      const orderComponent = this.$refs.adminOrderModal
+      orderComponent.showModal()
     }
   },
   mounted () {

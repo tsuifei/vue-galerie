@@ -29,9 +29,6 @@
           <td width="120">{{item.origin_price}}</td>
           <td width="120">{{item.price}}</td>
           <td width="100">
-            <!-- <span v-if="item.is_enabled" class="text-success">啟用</span>
-            <span class="" v-else>未啟用</span> -->
-            <!-- --- -->
             <div class="form-check form-switch">
               <input
               class="form-check-input"

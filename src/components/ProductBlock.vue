@@ -10,13 +10,8 @@
   >
     <div class="card text-dark border shadow-sm bg-light p-2">
       <router-link :to="`/product/${item.id}`">
-        <div class="card-img-top card_img_style">
-          <div class="more_msg">
-            <Font-awesome-icon icon="search-plus" />
-          </div>
-          <!-- <div class="img-box text-center"> -->
+        <div class="card-img-top">
           <img class="card-img-top" :src="item.imageUrl" alt="'商品圖" />
-          <!-- </div> -->
         </div>
       </router-link>
       <div
