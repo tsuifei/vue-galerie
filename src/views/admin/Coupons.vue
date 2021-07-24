@@ -9,7 +9,7 @@
         type="button"
         class="btn btn-primary"
       >
-        建立新產品
+        新增優惠券
       </button>
     </div>
     <table class="table">

@@ -1,8 +1,8 @@
 <template>
   <div
     class="modal fade"
-    id="AdminCouponModal"
-    ref="couponModal"
+    id="AdminOrderModal"
+    ref="orderModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalLabel"
@@ -20,52 +20,87 @@
         <!-- modal-body -->
         <div class="modal-body">
           <div class="row">
-            <div class="">
-              <div class="form-group">
-                <label for="title">Coupon Name</label>
-                <input
-                  v-model="tempCoupon.title"
-                  id="title"
-                  type="text"
-                  class="form-control"
-                  placeholder="請輸入優惠名稱"
-                />
-                <label for="code">Coupon Code</label>
-                <input
-                  v-model="tempCoupon.code"
-                  id="code"
-                  type="text"
-                  class="form-control"
-                  placeholder="請輸入優惠碼"
-                />
-                <label for="percent">Coupon Discount %</label>
-                <input
-                  v-model.number="tempCoupon.percent"
-                  id="percent"
-                  type="number"
-                  class="form-control"
-                  placeholder="請輸入折扣"
-                />
-                <label for="due_date">Expiration date</label>
-                <input
-                  v-model="due_date"
-                  id="due_date"
-                  type="date"
-                  class="form-control"
-                  placeholder="請輸入到期日"
-                />
-              <!-- <div class="form-group"> -->
-                <div class="form-check form-switch">
+            <div class="col-md-4">
+              <h3>訂單用戶資料</h3>
+              <table class="table">
+                <tbody v-if="tempOrder.user">
+                  <tr>
+                    <th style="width: 100px">姓名</th>
+                    <td>{{ tempOrder.user.name }}</td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td>{{ tempOrder.user.email }}</td>
+                  </tr>
+                  <tr>
+                    <th>電話</th>
+                    <td>{{ tempOrder.user.tel }}</td>
+                  </tr>
+                  <tr>
+                    <th>地址</th>
+                    <td>{{ tempOrder.user.address }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-8">
+              <h3>訂單細節</h3>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <th style="width: 100px">訂單編號</th>
+                    <td>{{ tempOrder.id }}</td>
+                  </tr>
+                  <tr>
+                    <th>下單時間</th>
+                    <td>{{ $formats.formatDate(tempOrder.create_at) }}</td>
+                  </tr>
+                  <tr>
+                    <th>付款狀態</th>
+                    <td>
+                      <strong v-if="tempOrder.is_paid" class="text-success"
+                        >已付款</strong
+                      >
+                      <span v-else class="text-muted">尚未付款</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>總金額</th>
+                    <td>
+                      {{ tempOrder.total}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3>選購商品列表</h3>
+              <table class="table">
+                <thead>
+                  <tr></tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in tempOrder.products" :key="item.id">
+                    <th>
+                      {{ item.product.title }}
+                    </th>
+                    <td>{{ item.qty }} / {{ item.product.unit }}</td>
+                    <td class="text-end">
+                      {{ item.final_total }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="d-flex justify-content-end">
+                <div class="form-check">
                   <input
-                    v-model="tempCoupon.is_enabled"
-                    :id="tempCoupon.id"
-                    :true-value="1"
-                    :false-value="0"
                     class="form-check-input"
                     type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    v-model="tempOrder.is_paid"
                   />
-                  <label class="form-check-label"
-                  :for="tempCoupon.id">{{ tempCoupon.is_enabled ? '已啟用' : '未啟用' }}
+                  <label class="form-check-label" for="flexCheckDefault">
+                    <span v-if="tempOrder.is_paid">已付款</span>
+                    <span v-else>未付款</span>
                   </label>
                 </div>
               </div>
@@ -83,7 +118,7 @@
             取消
           </button>
           <button
-            @click="$emit('emit-update-coupon', tempCoupon)"
+            @click="$emit('emit-update-order', tempOrder)"
             type="button" class="btn btn-primary">
             確認
           </button>
@@ -99,54 +134,45 @@ export default {
   // 外層取來的資料
   // props: ['propsCoupon', 'isNew'],
   props: {
-    propsCoupon: {
+    propsOrder: {
       type: Object,
       default () {
         return {}
       }
-    },
-    isNew: {
-      type: Boolean,
-      default: false
-    },
-    is_enabled: {
-      type: Number,
-      default: 1
     }
   },
   data () {
     return {
-      couponModal: '',
-      tempCoupon: {},
-      due_date: ''
+      orderModal: '',
+      tempOrder: {}
     }
   },
-  emits: ['emit-update-coupon'],
+  emits: ['emit-update-order'],
   watch: { // 待查正確使用方法
-    propsCoupon () {
-      this.tempCoupon = this.propsCoupon
+    propsOrder () {
+      this.tempOrder = this.propsOrder
       // console.log(this.tempCoupon)
       // 把日期轉回YYYY-MM-DD
-      const isoDateTime = new Date(this.tempCoupon.due_date * 1000)
+      const isoDateTime = new Date(this.tempOrder.create_at * 1000)
         .toISOString().split('T');
-      [this.due_date] = isoDateTime
+      [this.create_at] = isoDateTime
       // console.log(isoDateTime)
     },
-    due_date () {
-      this.tempCoupon.due_date = Math.floor(new Date(this.due_date) / 1000)
+    create_at () {
+      this.tempOrder.create_at = Math.floor(new Date(this.create_at) / 1000)
     }
   },
   methods: {
     showModal () {
-      this.couponModal.show()
+      this.orderModal.show()
     },
     hideModal () {
-      this.couponModal.hide()
+      this.orderModal.hide()
     }
   },
   mounted () {
     // 實例化 couponModal
-    this.couponModal = new Modal(this.$refs.couponModal, {
+    this.orderModal = new Modal(this.$refs.orderModal, {
       keyboard: false,
       backdrop: 'static'
     })

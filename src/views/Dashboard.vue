@@ -29,8 +29,8 @@
         </div>
       </div>
     </nav> -->
-    <AdminNavBar></AdminNavBar>
-    <router-view v-if="checkSuccess" class="container" />
+    <admin-nav-bar></admin-nav-bar>
+    <router-view class="container" />
   </div>
 </template>
 
@@ -40,8 +40,7 @@ export default {
   name: 'Dashboard',
   data () {
     return {
-      api_token: '',
-      checkSuccess: false
+      api_token: ''
     }
   },
   components: {
@@ -54,27 +53,28 @@ export default {
         /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
         '$1'
       )
+      this.$http.defaults.headers.common.Authorization = `${token}`
       if (token) {
-        this.$http.defaults.headers.common.Authorization = `${token}`
         const apiUrl = `${process.env.VUE_APP_API}api/user/check`
-
-        this.$http
-          .post(apiUrl, { api_token: this.token })
+        this.$http.post(apiUrl, { api_token: this.token })
           .then((response) => {
             if (response.data.success) {
-              this.checkSuccess = true
+              console.log('成功登入')
+              this.$router.push('/admin/products')
             } else {
               alert(response.data.message)
-              this.checkSuccess = false
+              console.log('登入失敗')
               this.$router.push('/login')
             }
           })
           .catch((err) => {
             console.dir('尚未登入喔', err)
+            this.$router.push('/login')
           })
       } else {
         alert('尚未登入喔')
         this.$router.push('/login')
+        // this.$router.replace({ name: 'Login' })
       }
     }
   },

@@ -51,12 +51,10 @@ export default {
   },
   methods: {
     signIn () {
-      const apiUrl = `${process.env.VUE_APP_API}admin/signin`
       this.isLoading = true
-      this.$http
-        .post(apiUrl, this.user)
+      const apiUrl = `${process.env.VUE_APP_API}admin/signin`
+      this.$http.post(apiUrl, this.user)
         .then((response) => {
-          this.isLoading = false
           if (response.data.success) {
             alert(response.data.message)
             // success 取 token 存入 cookie
@@ -64,17 +62,51 @@ export default {
             // console.log(token, expired)
             // 寫入cookie 紀錄期限
             document.cookie = `hexToken=${token}; expires=${new Date(expired)}`
-            // 轉至產品頁
+            // 轉至後台產品頁
             this.$router.push('/admin/products')
           } else {
             alert(response.data.message)
+            this.$router.push('/admin/login')
             this.isLoading = false
           }
         })
         .catch((error) => {
           console.log(error)
         })
+    },
+    checkLogin () {
+      // 取出token
+      const token = document.cookie.replace(
+        /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+        '$1'
+      )
+      this.$http.defaults.headers.common.Authorization = `${token}`
+      if (token) {
+        const apiUrl = `${process.env.VUE_APP_API}api/user/check`
+        this.$http.post(apiUrl, { api_token: this.token })
+          .then((response) => {
+            if (response.data.success) {
+              console.log('成功登入')
+              this.$router.push('/admin/products')
+            } else {
+              alert(response.data.message)
+              console.log('登入失敗')
+              this.$router.push('/login')
+            }
+          })
+          .catch((err) => {
+            console.dir('尚未登入喔', err)
+            this.$router.push('/login')
+          })
+      } else {
+        alert('尚未登入喔')
+        this.$router.push('/login')
+        // this.$router.replace({ name: 'Login' })
+      }
     }
+  },
+  created () {
+    this.checkLogin()
   }
 }
 </script>

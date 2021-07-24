@@ -48,6 +48,7 @@
             <button
               class="btn btn-outline-danger btn-sm"
               type="button"
+              @click="deleteOrder(order)"
             >
               刪除
             </button>
@@ -63,6 +64,8 @@
     <!-- AdminOrderModal -->
     <AdminOrderModal
     ref="adminOrderModal"
+    :propsOrder= "tempOrder"
+    @emit-update-order= "updateOrder"
     />
   </div>
 </template>
@@ -102,20 +105,19 @@ export default {
           alert(error)
         })
     },
-    // 新增/更新 Coupon
+    // 新增/更新 Order
     updateOrder (item) {
       console.log('updateOrder OK')
       this.tempOrder = item
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempOrder.id}`
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${this.tempOrder.id}`
       this.$http.put(url, {
         data: this.tempOrder
       })
         .then((response) => {
           if (response.data.success) {
             alert(response.data.message)
-
             this.$refs.adminOrderModal.hideModal()
-            this.getCoupons(this.page)
+            this.getOrders(this.page)
           } else {
             alert(response.data.message)
           }
@@ -123,6 +125,26 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+    // 刪除 Order
+    deleteOrder (order) {
+      console.log('deleteOrder OK')
+      if (confirm(`確認刪除此${order.user.name} Order?`)) {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${order.id}`
+        this.$http.delete(url)
+          .then((response) => {
+            console.log(response.data.message)
+            if (response.data.success) {
+              // alert(response.data.message);
+              this.getOrders()
+            } else {
+              alert(response.data.message)
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     openOrderModal (item) {
       this.tempOrder = { ...item }

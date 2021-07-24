@@ -44,6 +44,7 @@
             <div class="btn-group" width="120">
               <button
                 @click="openModal(false, item)"
+                :class="{ disabled: item.is_enabled }"
                 type="button"
                 class="btn btn-sm btn-outline-primary btn-sm"
               >
@@ -71,6 +72,7 @@
       ref="adminProductModal"
       :propsProduct = "tempProduct"
       :is-new= "isNew"/>
+    <loading :active.sync="isLoading"></loading>
   </div>
 </template>
 
@@ -91,7 +93,8 @@ export default {
       isNew: false,
       // isLoading: true,
       pagination: {},
-      page: 1
+      page: 1,
+      isLoading: false
     }
   },
   components: {
@@ -101,12 +104,14 @@ export default {
   methods: {
     // 取得產品列表
     getProducts (page = 1) {
+      this.isLoading = true
       // console.log('進來getProducts')
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`
       this.$http.get(url)
         .then((response) => {
           // console.log('取得產品列表')
           if (response.data.success) {
+            this.isLoading = false
             this.products = response.data.products
             // console.log(this.products)
             this.pagination = response.data.pagination
@@ -190,6 +195,9 @@ export default {
     }
   },
   mounted () {
+    this.getProducts()
+  },
+  created () {
     // 取出token
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
@@ -201,10 +209,7 @@ export default {
       this.$router.push('/login')
     }
     this.$http.defaults.headers.common.Authorization = `${token}`
-  },
-  created () {
     // console.log('created')
-    this.getProducts()
   }
 }
 </script>

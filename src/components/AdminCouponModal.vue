@@ -43,6 +43,7 @@
                   v-model.number="tempCoupon.percent"
                   id="percent"
                   type="number"
+                  min="1"
                   class="form-control"
                   placeholder="請輸入折扣"
                 />

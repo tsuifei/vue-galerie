@@ -2,11 +2,17 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 // import Front from '../views/Front.vue';
 
 const routes = [
+  // 前台路由
   {
     path: '/',
     name: 'Front',
     component: () => import('../views/Front.vue'),
     children: [
+      {
+        path: '',
+        name: 'Home',
+        component: () => import('../views/Home.vue')
+      },
       {
         path: 'about',
         name: 'About',
@@ -33,18 +39,19 @@ const routes = [
         component: () => import('../views/Article.vue')
       },
       {
-        path: 'login',
-        name: 'Login',
-        component: () => import('../views/Login.vue')
-      },
-      {
         path: 'carts',
         name: 'Carts',
         component: () => import('../views/Carts.vue')
       }
     ]
   },
-
+  // 登入
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/admin/Login.vue')
+  },
+  // 後台路由
   {
     path: '/admin',
     name: 'Admin',
@@ -69,9 +76,16 @@ const routes = [
         path: 'articles',
         name: 'AdminArticles',
         component: () => import('../views/admin/Articles.vue')
+      },
+      // 404 訊息頁面
+      {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/views/NotFound.vue')
       }
     ]
   },
+  // 重新導向回首頁
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',

@@ -21,12 +21,6 @@
         <!-- RWD 漢堡按鈕 Fin -->
         <div class="navbar-brand">
           <router-link to="/" class="navbar-brand">
-            <!-- <img
-              src="../assets/imgs/palette.svg"
-              alt="Bootstrap"
-              width="32"
-              height="32"
-            /> -->
             <img class="vue-logo" src="../assets/imgs/vue-logo.png" alt="Vue Galerie">
           </router-link>
         </div>
