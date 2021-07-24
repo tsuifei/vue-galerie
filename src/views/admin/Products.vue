@@ -135,7 +135,7 @@ export default {
         httpMethod = 'put'
         // this.$emit('emitUpdate')
       }
-      // this.tempProduct.is_enabled = !this.tempProduct.is_enabled
+      this.tempProduct.is_enabled = !this.tempProduct.is_enabled
       // 使用[]物件取值
       this.$http[httpMethod](url, {
         data: this.tempProduct
